@@ -1,0 +1,63 @@
+{
+  "name": "configuracao_usuario_novo_colaborador",
+  "description": "Rotina de configuração de usuário para novo colaborador: após a contratação, o RH envia o contrato via DocuSign; o candidato assina. Com o contrato assinado, o RH cria um ticket no Zendesk contendo os dados do colaborador. A equipe de TI recebe o ticket, cria a conta de usuário nos sistemas corporativos, configura os acessos necessários e fecha o ticket, concluindo a contratação.",
+  "trigger": "Contratação de novo colaborador (aprovada pelo gestor) – rotina disparada sempre que houver um novo ingresso",
+  "completion_criteria": "Contrato assinado e ticket de usuário fechado com conta criada",
+  "tasks": [
+    {
+      "id": "assinatura_contrato",
+      "name": "Assinatura do contrato",
+      "description": "Envio do contrato ao candidato e obtenção da assinatura digital",
+      "platform": "DocuSign",
+      "responsible": "RH (envia) e Candidato (assina)",
+      "steps": [
+        "RH gera o contrato com os dados do colaborador",
+        "RH carrega o contrato no DocuSign e define o candidato como signatário",
+        "RH envia o convite de assinatura ao candidato",
+        "Candidato assina digitalmente o contrato",
+        "DocuSign devolve o PDF assinado e notifica o RH"
+      ],
+      "inputs": [
+        "Contrato em PDF ou Word contendo nome, CPF, cargo, data de início"
+      ],
+      "outputs": [
+        "Contrato assinado em PDF armazenado no DocuSign"
+      ],
+      "exceptions": [
+        "Se o candidato não assinar dentro do prazo, o processo é interrompido e o RH é notificado."
+      ],
+      "notes": ""
+    },
+    {
+      "id": "emissao_ticket_usuario",
+      "name": "Emissão de ticket para criação de usuário",
+      "description": "Abertura de ticket no Zendesk para que a TI crie a conta de usuário do novo colaborador",
+      "platform": "Zendesk",
+      "responsible": "RH cria o ticket; TI (equipe de suporte) cria o usuário",
+      "steps": [
+        "RH abre um ticket no Zendesk informando os dados do colaborador",
+        "Classifica o ticket como “Criar Usuário – Novo Colaborador”",
+        "TI recebe o ticket e cria a conta no Active Directory/Google Workspace (ou outro sistema)",
+        "TI configura os acessos necessários ao colaborador",
+        "TI fecha o ticket com confirmação e envia e‑mail de boas‑vindas ao colaborador"
+      ],
+      "inputs": [
+        "Nome completo",
+        "E‑mail corporativo desejado",
+        "Cargo",
+        "Área",
+        "Data de início",
+        "Requisitos de acesso"
+      ],
+      "outputs": [
+        "Conta de usuário criada nos sistemas corporativos",
+        "E‑mail de boas‑vindas enviado ao colaborador",
+        "Ticket fechado no Zendesk"
+      ],
+      "exceptions": [
+        "Se faltarem informações no ticket, a TI solicita complementação ao RH antes de prosseguir."
+      ],
+      "notes": ""
+    }
+  ]
+}
